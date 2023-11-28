@@ -1,18 +1,44 @@
 import { Request, Response } from 'express';
 import { studentServices } from './student.service';
+import studentJoiSchema from './student.validation';
 
 const createStudent = async (req: Request, res: Response) => {
   try {
-    const { student: studentData } = req.body; // body theke data destructure kore  niye pathano holo
-    const result = await studentServices.createStudentIntoDB(studentData);
+
+   // body theke data destructure kore  niye pathano holo
+    const { student: studentData } = req.body;
+
+
+    //validation by Joi 
+   const {error } = studentJoiSchema.validate(studentData)
+
+
+   const result = await studentServices.createStudentIntoDB(studentData);
+
+    // console.log(error , value)
+    if(error){
+      res.status(500).json({
+        success:false ,
+        message:"something wrong in your  data",
+        error:error
+      })
+    }
+
 
     res.status(200).json({
       success: true,
       message: 'successfully send your data',
       data: result,
     });
-  } catch (err) {
-    console.log(err);
+  }
+
+  
+  catch (err) {
+    res.status(200).json({
+      success: false,
+      message: 'something went wrong',
+      error: err,
+    })
   }
 };
 // find method get all students from db

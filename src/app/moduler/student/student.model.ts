@@ -9,23 +9,47 @@ import {
 const userSchema = new Schema<StudenUser>({
   firstName: { 
     type: String, 
-    required: [true, 'first name is required']
+    required: [true, 'first name is required'],
+    maxlength:[15, "fist name is to long"],
+    trim:true,
+
+    // validate:{
+    //   validator: function(value:string){
+    //     const firstNameStr = value.charAt(0).toUpperCase() + value.slice(1)
+    //      return firstNameStr === value
+    //   },
+    //   message:"{VALUE} is not capitalize formate"
+    // }
+
+    //joi babohar kore validdate koreci tai ei custome validation dorker nei
+    
+
    },
   middleName: { type: String },
   lastName: { 
     type: String ,
-    required : [true, 'first name is required']
+    required : [true, 'last name is required'],
+    maxlength:[15, "last name is to long"] ,
+    trim:true ,
+    // validate:{
+    //   validator :(value:string)=>validator.isAlpha(value),
+    //   message:"{VALUE} is not match"
+    // }
+
+
    },
 });
 
 const guardianSchema = new Schema<Guardian>({
   fatherName: {
     type: String,
-    required: [true, 'father name is required']
+    required: [true, 'father name is required'],
+    trim:true
   },
   fatherContactNo: {
     type: String,
     required: [true, 'father contact is required'],
+    trim:true
   },
   fatherOccupation: {
     type: String,
@@ -37,11 +61,13 @@ const guardianSchema = new Schema<Guardian>({
   },
   motherContactNo: {
     type: String,
-    required: [true, 'mother contact  is required']
+    required: [true, 'mother contact  is required'],
+    trim:true
   },
   motherOccupation: {
     type: String,
-    required: [true, 'mother occupation name is required']
+    required: [true, 'mother occupation name is required'],
+    trim:true
   },
 });
 
@@ -64,9 +90,9 @@ const studentSchema = new Schema<Student>({
   id: { type: String , required:true , unique:true},
   name: {
     type:userSchema ,
-    required:true
+    required:true  
   },
-  age: { type: Number },
+  age: { type: Number ,trim:true },
   gender: {
     type:String ,
     enum: {
@@ -78,9 +104,18 @@ const studentSchema = new Schema<Student>({
 
   },
   dateOfBirth: { 
-    type: String
+    type: String ,
+    trim:true
   },
-  email: { type: String, required:true ,unique:true },
+  // trim: removes your extra space , unique: can not add duplicate values
+  email: { 
+    type: String, required:true ,unique:true ,trim:true ,
+    // validate:{
+    //   validator:(value:string)=>validator.isEmail(value),
+    //   message:"{VALUE} is not valid"
+    // }
+
+   },
   contactNo: { type: String, required:true },
   emmergenceContactNo: { type: String, required:true },
   presentAddress:{ type: String, required:true },
